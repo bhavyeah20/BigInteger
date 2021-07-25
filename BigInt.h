@@ -4,6 +4,8 @@
 
 using namespace std;
 
+
+
 class BigInt{
 private:
 	string value;
@@ -45,21 +47,21 @@ public:
 	BigInt operator%(const string&) const ;
 
 	//Arithmetic assignment
-	BigInt operator+=(const BigInt&);
-	BigInt operator-=(const BigInt&);
-	BigInt operator*=(const BigInt&);
-	BigInt operator/=(const BigInt&);
-	BigInt operator%=(const BigInt&);
-	BigInt operator+=(const long long&);
-	BigInt operator-=(const long long&);
-	BigInt operator*=(const long long&);
-	BigInt operator/=(const long long&);
-	BigInt operator%=(const long long&);
-	BigInt operator+=(const string&);
-	BigInt operator-=(const string&);
-	BigInt operator*=(const string&);
-	BigInt operator/=(const string&);
-	BigInt operator%=(const string&);
+	BigInt& operator+=(const BigInt&);
+	BigInt& operator-=(const BigInt&);
+	BigInt& operator*=(const BigInt&);
+	BigInt& operator/=(const BigInt&);
+	BigInt& operator%=(const BigInt&);
+	BigInt& operator+=(const long long&);
+	BigInt& operator-=(const long long&);
+	BigInt& operator*=(const long long&);
+	BigInt& operator/=(const long long&);
+	BigInt& operator%=(const long long&);
+	BigInt& operator+=(const string&);
+	BigInt& operator-=(const string&);
+	BigInt& operator*=(const string&);
+	BigInt& operator/=(const string&);
+	BigInt& operator%=(const string&);
 
 	//increment , decrement
 	BigInt& operator++();    
@@ -102,163 +104,12 @@ public:
 
 // ----------------------------------------------
 
-//Constructors
-
-//Default
-BigInt::BigInt(){
-	value = "0";
-	sign = '+';
-}
-
-//Copy
-BigInt::BigInt(const BigInt &num){
-	value = num.value;
-	sign = num.sign;
-}
-
-BigInt::BigInt(const long long& num) {
-    value = to_string(abs(num));
-    if (num < 0)
-        sign = '-';
-    else
-        sign = '+';
-}
-
-//string to bigInt
-BigInt::BigInt(const string &num){
-	//if string is signed
-	if(num[0] == '+' || num[0] == '-'){
-		string magnitude = num.substr(1);
-
-		if(isValidNumber(magnitude)){
-			value = magnitude;
-			sign = num[0];
-		}else{
-            throw invalid_argument("Expected an integer, got \'" + num + "\'");
-		}
-	}
-	//if sign isn't specified assign +ve
-	else{
-		string magnitude = num;
-		if(isValidNumber(magnitude)){
-			value = magnitude;
-			sign = '+';
-		}else{
-            throw invalid_argument("Expected an integer, got \'" + num + "\'");
-		}	
-	}
-
-
-	stripLeadingZeros(value);
-	
-}
-
-
-// ----------------------------------------------
-
-//assignment
-
-BigInt& BigInt::operator=(const BigInt& num){
-	value = num.value;
-	sign = num.sign;
-
-	return *this;
-}
-
-BigInt& BigInt::operator=(const long long& num){
-	BigInt temp(num);
-	value = temp.value;
-	sign = temp.sign;
-
-	return *this;
-}
-
-BigInt& BigInt::operator=(const std::string& num) {
-    BigInt temp(num);
-    value = temp.value;
-    sign = temp.sign;
-
-    return *this;
-}
-
-
-
-
-
-
-
-
-
-
-
-// ----------------------------------------------
-
-//Conversions
-
-
-
-string BigInt::to_String() const{
-	if(this->sign == '-')
-		return "-" + this->value;
-
-	return this->value;
-}
-
-
-int BigInt::to_Int() const {
-    return stoi(this->to_String());
-}
-
-long long BigInt::to_Long_Long() const {
-    return stoll(this->to_String());
-}
-
-
-
-
-
-// ----------------------------------------------
-
-
-//unary arithmetic
-
-BigInt BigInt::operator+() const{
-	return *this;
-}
-
-BigInt BigInt::operator-() const{
-	BigInt num;
-	
-	if(value != "0"){
-		if(sign == '+'){
-			num.sign = '-';
-		}
-		else{
-			num.sign = '+';
-		}
-	}
-
-	num.value = value;
-
-	return num;
-}
-
-
-
-
-// ----------------------------------------------
-
-// Binary arithmetic
-
-
-// ----------------------------------------------
-
-
 
 //Basic math
 
 // Functions do not end with const as they are not 
 // member functions
+
 
 BigInt abs(const BigInt& num){
 	return num < 0 ? -num : num;
@@ -415,5 +266,425 @@ void stripLeadingZeros(string &value){
 	else
 		value = value.substr(i);
 }
+
+
+
+// ----------------------------------------------
+
+//Constructors
+
+//Default
+BigInt::BigInt(){
+	value = "0";
+	sign = '+';
+}
+
+//Copy
+BigInt::BigInt(const BigInt &num){
+	value = num.value;
+	sign = num.sign;
+}
+
+BigInt::BigInt(const long long& num) {
+    value = to_string(abs(num));
+    if (num < 0)
+        sign = '-';
+    else
+        sign = '+';
+}
+
+//string to bigInt
+BigInt::BigInt(const string &num){
+	//if string is signed
+	if(num[0] == '+' || num[0] == '-'){
+		string magnitude = num.substr(1);
+
+		if(isValidNumber(magnitude)){
+			value = magnitude;
+			sign = num[0];
+		}else{
+            throw invalid_argument("Expected an integer, got \'" + num + "\'");
+		}
+	}
+	//if sign isn't specified assign +ve
+	else{
+		string magnitude = num;
+		if(isValidNumber(magnitude)){
+			value = magnitude;
+			sign = '+';
+		}else{
+            throw invalid_argument("Expected an integer, got \'" + num + "\'");
+		}	
+	}
+
+
+	stripLeadingZeros(value);
+	
+}
+
+
+// ----------------------------------------------
+
+//assignment
+
+BigInt& BigInt::operator=(const BigInt& num){
+	value = num.value;
+	sign = num.sign;
+
+	return *this;
+}
+
+BigInt& BigInt::operator=(const long long& num){
+	BigInt temp(num);
+	value = temp.value;
+	sign = temp.sign;
+
+	return *this;
+}
+
+BigInt& BigInt::operator=(const std::string& num) {
+    BigInt temp(num);
+    value = temp.value;
+    sign = temp.sign;
+
+    return *this;
+}
+
+
+
+
+
+// ----------------------------------------------
+
+//Conversions
+
+
+
+string BigInt::to_String() const{
+	if(this->sign == '-')
+		return "-" + this->value;
+
+	return this->value;
+}
+
+
+int BigInt::to_Int() const {
+    return stoi(this->to_String());
+}
+
+long long BigInt::to_Long_Long() const {
+    return stoll(this->to_String());
+}
+
+
+// ----------------------------------------------
+
+
+//unary arithmetic
+
+BigInt BigInt::operator+() const{
+	return *this;
+}
+
+BigInt BigInt::operator-() const{
+	BigInt num;
+	
+	if(value != "0"){
+		if(sign == '+'){
+			num.sign = '-';
+		}
+		else{
+			num.sign = '+';
+		}
+	}
+
+	num.value = value;
+
+	return num;
+}
+
+
+
+// ----------------------------------------------
+
+// Binary arithmetic
+
+BigInt BigInt::operator+(const BigInt &num) const{
+
+	if(this->sign == '+' && num.sign == '-'){
+		BigInt rhs = num;
+		rhs.sign = '+';
+		return *this - rhs;
+	}
+
+	else if(this->sign == '-' && num.sign == '+'){
+		BigInt lhs = *this;
+		lhs.sign = '+';
+		return -(lhs - num);
+	}
+
+	string larger = this->to_String();
+	string smaller = num.to_String();
+
+	if(smaller.size() > larger.size())
+		swap(smaller, larger);
+
+	long long j = smaller.size() - 1;
+	for(long long i = larger.size() - 1; j >= 0; i--, j--){
+		larger[i] = larger[i] + (smaller[j]-'0');
+	}
+	int carry = 0, sum = 0;
+	for(long long i = larger.size()-1; i >= 0; i--){
+		sum = carry + (larger[i]-'0');
+		carry = sum / 10;
+		larger[i] = (sum%10) + '0';
+	}
+
+	if(carry){
+		larger = to_string(carry) + larger;
+	}
+
+	BigInt res(larger);
+
+	if(this->sign == '-' && res.value != "0")
+		res.sign = '-';
+
+	return res;
+
+}
+
+BigInt BigInt::operator-(const BigInt& num) const{
+	if(this->sign == '+' && num.sign == '-'){
+		BigInt rhs = num;
+		rhs.sign = '+';
+		return *this + rhs;
+	}
+
+	else if(this->sign == '-' && num.sign == '+'){
+		BigInt lhs = *this;
+		lhs.sign = '+';
+		return -(lhs + num);
+	}
+
+
+}
+
+
+BigInt BigInt::operator*(const BigInt &num) const{
+
+	if(*this == 0 || num == 0)
+		return BigInt(0);
+
+	if(*this == 1)
+		return num;
+
+	if(num == 1)
+		return *this;
+
+	BigInt product;
+
+
+	string num1 = this->to_String();
+	string num2 = num.to_String();
+
+	string res(num1.size()+num2.size(),'0');
+
+	if(num1.size() < num2.size())
+		swap(num1,num2);
+
+    for(long long i = num1.size()-1; i >= 0; i--){
+        for(long long j = num2.size()-1; j >= 0; j--){
+            long long number = (num1[i]-'0') * (num2[j]-'0') + (res[i+j+1] - '0');
+            res[i+j] = res[i+j] + number/10;
+            res[i+j+1] = (number % 10) + '0'; 
+            
+        }
+    }
+    
+   	stripLeadingZeros(res);
+ 	product = res;
+
+ 	if(this->sign == num.sign)
+ 		product.sign = '+';
+
+ 	else
+ 		product.sign = '-';
+
+ 	return product;
+
+}
+
+BigInt BigInt::operator/(const BigInt &num) const{
+
+}
+
+
+BigInt BigInt::operator%(const BigInt &num) const{
+	
+}
+
+
+
+// ----------------------------------------------
+
+// I/O Stream
+
+istream& operator>>(istream &in, BigInt &num){
+	string input;
+	in >> input;
+	num = BigInt(input);
+
+	return in;
+}
+
+ostream& operator<<(ostream &out, const BigInt& num){
+	if(num.sign == '-')
+		out << num.sign;
+	out << num.value;
+	return out;
+}
+
+// ----------------------------------------------
+
+// relational arithmetic
+
+bool BigInt::operator==(const BigInt& num) const{
+	return (sign == num.sign) && (value == num.value);
+}
+
+bool BigInt::operator!=(const BigInt& num) const{
+	return !(*this == num);
+}
+
+bool BigInt::operator<(const BigInt& num) const{
+	if(sign == num.sign){
+		if(sign == '+'){
+			if(value.length() == num.value.length())
+				return value < num.value;
+			return value.length() < num.value.length();
+		}
+		else
+			return -(*this) > -num;
+	}
+
+	else
+		return sign == '-';
+}
+
+
+
+
+
+// ----------------------------------------------
+
+//Arithmetic assignment 
+
+
+BigInt& BigInt::operator+=(const BigInt& num){
+	*this = *this + num;
+
+	return *this;
+}
+
+
+BigInt& BigInt::operator-=(const BigInt& num){
+	*this = *this - num;
+
+	return *this;
+}
+
+BigInt& BigInt::operator*=(const BigInt& num){
+	*this = *this * num;
+
+	return *this;
+}
+
+BigInt& BigInt::operator/=(const BigInt& num){
+	*this = *this / num;
+
+	return *this;
+}
+
+BigInt& BigInt::operator%=(const BigInt& num){
+	*this = *this % num;
+
+	return *this;
+}
+
+
+BigInt& BigInt::operator+=(const long long& num) {
+    *this = *this + BigInt(num);
+
+    return *this;
+}
+
+BigInt& BigInt::operator-=(const long long& num) {
+    *this = *this - BigInt(num);
+
+    return *this;
+}
+
+BigInt& BigInt::operator*=(const long long& num) {
+    *this = *this * BigInt(num);
+
+    return *this;
+}
+
+BigInt& BigInt::operator/=(const long long& num) {
+    *this = *this / BigInt(num);
+
+    return *this;
+}
+
+BigInt& BigInt::operator%=(const long long& num) {
+    *this = *this % BigInt(num);
+
+    return *this;
+}
+
+
+BigInt& BigInt::operator+=(const string& num) {
+    *this = *this + BigInt(num);
+
+    return *this;
+}
+
+
+BigInt& BigInt::operator-=(const string& num) {
+    *this = *this - BigInt(num);
+
+    return *this;
+}
+
+
+BigInt& BigInt::operator*=(const string& num) {
+    *this = *this * BigInt(num);
+
+    return *this;
+}
+
+
+
+BigInt& BigInt::operator/=(const string& num) {
+    *this = *this / BigInt(num);
+
+    return *this;
+}
+
+
+BigInt& BigInt::operator%=(const string& num) {
+    *this = *this % BigInt(num);
+
+    return *this;
+}
+
+	
+
+// ----------------------------------------------
+
+
+
+
+
 
 // ----------------------------------------------
