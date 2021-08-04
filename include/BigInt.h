@@ -342,7 +342,7 @@ BigInt& BigInt::operator=(const long long& num){
 	return *this;
 }
 
-BigInt& BigInt::operator=(const std::string& num) {
+BigInt& BigInt::operator=(const string& num) {
     BigInt temp(num);
     value = temp.value;
     sign = temp.sign;
@@ -1009,9 +1009,34 @@ BigInt& BigInt::operator%=(const string& num) {
 
 // ----------------------------------------------
 
+// Increment / Decrement
 
 
+//Pre
+BigInt& BigInt::operator++(){
+	*this += 1;
+	return *this;
+}
 
+
+BigInt& BigInt::operator--(){
+	*this -= 1;
+	return *this;
+}
+
+//Post
+
+BigInt BigInt::operator++(int){
+	BigInt temp = *this;
+	*this += 1;
+	return temp;
+}
+
+BigInt BigInt::operator--(int){
+	BigInt temp = *this;
+	*this -= 1;
+	return temp;
+}
 
 
 // ----------------------------------------------
