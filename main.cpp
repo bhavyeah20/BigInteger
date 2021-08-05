@@ -1,7 +1,8 @@
 #include "include/BigInt.h"
 
 int main(){
-	BigInt b1("1");
-	cout<<pow(b1,925698469804356);
+	BigInt b1("152");
+	int exp = 123;
+	cout<<pow(b1,exp);
 }
 

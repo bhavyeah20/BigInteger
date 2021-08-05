@@ -98,9 +98,6 @@ public:
 	string to_String() const;
 	int to_Int() const;
 	long long to_Long_Long() const;
-
-	BigInt factorial() const;
-	BigInt fibonacci() const;
 };
 
 
@@ -135,7 +132,7 @@ BigInt pow(const BigInt &base, long long exp){
 		if(exp % 2)
 			res *= tempBase;
 		exp /= 2;
-		res *= res;
+		tempBase *= tempBase;
 	}
 
 	return res;
@@ -154,7 +151,10 @@ BigInt sqrt(const BigInt& num){
 	if(num < 0)
 		throw invalid_argument("Number must be non negative!");
 
+	if(num == 1)
+		return 1;
 
+	//num1xnum2=num. Max value of numi = num/2
 	BigInt start = 0, end = num / 2;
 	BigInt ans = 0;
 	while(start <= end){
